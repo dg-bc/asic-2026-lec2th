@@ -1,0 +1,49 @@
+digraph TrafficLight {
+    graph [rankdir=TB, bgcolor="white", pad="0.3", nodesep="0.25",
+           ranksep="0.45", fontname="DejaVu Sans", fontsize=16,
+           labelloc=t,
+           label="Moore traffic light: RED 10 -> GREEN 7 -> YELLOW 3\nNode: state / (RED GREEN YELLOW). Each solid arrow: one rising CLK edge, RST_N=1."];
+    node [shape=circle, style=filled, fontname="DejaVu Sans",
+          fontsize=12, width="0.80", height="0.80", fixedsize=true];
+    edge [arrowsize="0.7", fontname="DejaVu Sans", fontsize=11];
+
+    subgraph cluster_red {
+        label="RED: 10 units"; color="#d96c6c"; style=rounded;
+        node [fillcolor="#ffe1e1", color="#a52222"];
+        { rank=same; R0; R1; R2; R3; R4; R5; R6; R7; R8; R9; }
+        R0 [label="R0\n100"]; R1 [label="R1\n100"];
+        R2 [label="R2\n100"]; R3 [label="R3\n100"];
+        R4 [label="R4\n100"]; R5 [label="R5\n100"];
+        R6 [label="R6\n100"]; R7 [label="R7\n100"];
+        R8 [label="R8\n100"]; R9 [label="R9\n100"];
+        R0 -> R1 -> R2 -> R3 -> R4 -> R5 -> R6 -> R7 -> R8 -> R9;
+    }
+    subgraph cluster_green {
+        label="GREEN: 7 units"; color="#66ad7e"; style=rounded;
+        node [fillcolor="#def5e5", color="#267646"];
+        { rank=same; G0; G1; G2; G3; G4; G5; G6; }
+        G0 [label="G0\n010"]; G1 [label="G1\n010"];
+        G2 [label="G2\n010"]; G3 [label="G3\n010"];
+        G4 [label="G4\n010"]; G5 [label="G5\n010"];
+        G6 [label="G6\n010"];
+        G6 -> G5 -> G4 -> G3 -> G2 -> G1 -> G0 [dir=back];
+    }
+    subgraph cluster_yellow {
+        label="YELLOW: 3 units"; color="#d9b545"; style=rounded;
+        node [fillcolor="#fff1bd", color="#8f6e00"];
+        { rank=same; Y0; Y1; Y2; }
+        Y0 [label="Y0\n001"]; Y1 [label="Y1\n001"];
+        Y2 [label="Y2\n001"];
+        Y0 -> Y1 -> Y2;
+    }
+    R9 -> G0;
+    G6 -> Y0;
+    Y2:w -> R0:w [constraint=false];
+
+    reset [shape=box, fixedsize=false, fillcolor="#eef0f4", color="#77808d",
+           label="Asynchronous reset\nRST_N=0 from ANY state\nhold at R0 while reset is active"];
+    reset -> R0 [style=dashed, label="reset", color="#77808d"];
+    invalid [shape=box, fixedsize=false, fillcolor="#eef0f4", color="#77808d",
+             label="Unused codes 20..31 / 100"];
+    invalid -> R0 [label="next CLK edge"];
+}

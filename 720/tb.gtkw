@@ -1,0 +1,18 @@
+[*] Four-bit reversible counter: one-process and three-process FSMs
+[timestart] 0
+[size] 1200 700
+[sst_width] 220
+[signals_width] 220
+@28
+tb.clk
+tb.rst_n
+tb.en
+tb.up_down
+tb.dut.state
+tb.dut_3stage.state
+tb.dut_3stage.next_state
+tb.expected_state
+@22
+tb.count[3:0]
+tb.count_3stage[3:0]
+tb.expected[3:0]

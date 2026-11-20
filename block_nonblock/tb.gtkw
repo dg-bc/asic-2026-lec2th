@@ -1,0 +1,24 @@
+[*] Blocking and nonblocking assignments in one testbench
+[timestart] 0
+[size] 1200 700
+[sst_width] 220
+[signals_width] 250
+@28
+tb.clk
+tb.rst_n
+tb.a_i
+tb.b_i
+@800200
+-x_block
+@28
+tb.x_block.a
+tb.x_block.b
+@1000200
+-x_block
+@800200
+-x_nonblock
+@28
+tb.x_nonblock.a
+tb.x_nonblock.b
+@1000200
+-x_nonblock

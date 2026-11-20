@@ -1,0 +1,12 @@
+[*] Default signals for the example testbench
+[timestart] 0
+[size] 1200 700
+[sst_width] 220
+[signals_width] 220
+@28
+tb.clk
+tb.rst_n
+tb.en
+@22
+tb.count[7:0]
+tb.expected[7:0]

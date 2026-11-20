@@ -1,0 +1,18 @@
+# 两个模块分别综合到通用逻辑门；不绑定 FPGA 或标准单元工艺库。
+read_verilog rtl/counter.v rtl/counter_3stage.v
+design -save source
+
+hierarchy -check -top counter
+synth -top counter
+check -assert
+stat
+write_verilog -noattr build/counter_netlist.v
+tee -o build/counter_stat.json stat -json
+
+design -load source
+hierarchy -check -top counter_3stage
+synth -top counter_3stage
+check -assert
+stat
+write_verilog -noattr build/counter_3stage_netlist.v
+tee -o build/counter_3stage_stat.json stat -json

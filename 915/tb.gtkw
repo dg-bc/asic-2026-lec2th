@@ -1,0 +1,17 @@
+[timestart] 0
+[size] 1400 900
+[pos] -1 -1
+@28
+tb.CLK
+tb.RST_N
+tb.FINISH
+tb.READ
+tb.WRITE
+tb.write_en
+tb.read_en
+@22
+tb.dut.CURT_STATE[1:0]
+tb.dut.NXT_STATE[1:0]
+tb.addr[7:0]
+tb.data_in[7:0]
+tb.data_out[7:0]

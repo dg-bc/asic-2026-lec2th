@@ -1,0 +1,14 @@
+[timestart] 0
+[size] 1400 900
+[pos] -1 -1
+@28
+tb.CLK
+tb.RST_N
+tb.RED
+tb.GREEN
+tb.YELLOW
+@22
+tb.dut.CURT_STATE[4:0]
+tb.dut.NXT_STATE[4:0]
+@24
+tb.phase[31:0]

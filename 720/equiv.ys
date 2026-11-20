@@ -1,0 +1,9 @@
+# 比较两版当前方向状态和计数输出的时序行为。
+read_verilog rtl/counter.v rtl/counter_3stage.v
+proc
+opt
+equiv_make counter counter_3stage equiv
+hierarchy -check -top equiv
+equiv_simple
+equiv_induct -seq 4
+equiv_status -assert

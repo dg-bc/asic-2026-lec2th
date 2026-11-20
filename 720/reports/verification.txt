@@ -1,0 +1,34 @@
+第 20 题：实际验证摘要
+工作目录：720/
+执行命令：make check
+执行结果：PASS（退出码 0）
+
+工具版本：
+Verilator 5.046 2026-02-28 rev v5.046-55-g1264184fb
+Icarus Verilog version 14.0 (devel) (s20251012-128-gc8097fb6f)
+Yosys 0.63+95 (git sha1 4716f4410, clang++ 18.1.8 -fPIC -O3)
+
+严格 lint：PASS，无警告
+Icarus Verilog 四态事件仿真：
+PASS: both FSMs match the model, cycles=3121 count_values=16/16 combinations=256/256 seed=119545888
+COVER: reset=412 hold=449 up=2121 down=139 overflow=16 underflow=19
+
+Verilator 仿真：
+PASS: both FSMs match the model, cycles=3121 count_values=16/16 combinations=256/256 seed=119545888
+COVER: reset=412 hold=449 up=2121 down=139 overflow=16 underflow=19
+
+形式等价验证（4 位计数输出与 1 位方向状态）：
+5 proven, 0 unproven
+Equivalence successfully proven!
+
+Yosys 通用门级综合：
+counter: total=21, flip_flops=5 (count=4, direction=1), combinational=16, latches=0
+counter_3stage: total=18, flip_flops=5 (count=4, direction=1), combinational=13, latches=0
+
+覆盖：16 个计数值 x 2 个旧方向状态 x 8 组控制输入 = 256/256
+每拍检查两版计数结果和方向状态；下降沿改输入后检查寄存器保持。
+包含同步复位、复位优先、使能保持、连续增减、方向切换、上下溢和沿间短脉冲。
+第三段使用当前 state，切换当拍按沿前状态计数，下一拍按新状态计数。
+专门检查：初值 5、方向 UP，输入依次 0/0/1/1，计数应为 6/5/4/5。
+波形：build/wave.vcd；完整运行日志：build/check.log。
+以上资源数为通用逻辑单元统计，不代表特定器件的物理面积、时序或功耗。

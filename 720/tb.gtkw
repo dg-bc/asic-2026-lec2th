@@ -1,4 +1,4 @@
-[*] Four-bit reversible counter: one-process and three-process FSMs
+[*] Switch rising-edge UP/DOWN control: one-process and three-process FSMs
 [timestart] 0
 [size] 1200 700
 [sst_width] 220
@@ -6,8 +6,11 @@
 @28
 tb.clk
 tb.rst_n
+tb.switch
+tb.dut.switch_d
+tb.dut_3stage.switch_d
+tb.dut.switch_rise
 tb.en
-tb.up_down
 tb.dut.state
 tb.dut_3stage.state
 tb.dut_3stage.next_state

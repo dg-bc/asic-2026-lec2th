@@ -4,21 +4,27 @@
 module counter_3stage (
     input  wire       clk,
     input  wire       rst_n,
+    input  wire       switch,
     input  wire       en,
-    input  wire       up_down,
     output reg  [3:0] count
 );
     localparam UP   = 1'b1;
     localparam DOWN = 1'b0;
     reg state;
     reg next_state;
+    reg switch_d;
+    wire switch_rise = switch && !switch_d;
 
-    // 第一段：状态寄存器。
+    // 第一段：状态寄存器与 switch 的上一拍采样。
     always @(posedge clk) begin
-        if (!rst_n)
+        if (!rst_n) begin
             state <= UP;
-        else
+            switch_d <= 1'b0;
+        end
+        else begin
             state <= next_state;
+            switch_d <= switch;
+        end
     end
 
     // 第二段：状态转移。
@@ -26,11 +32,11 @@ module counter_3stage (
         next_state = state;
         case (state)
             UP: begin
-                if (!up_down)
+                if (switch_rise)
                     next_state = DOWN;
             end
             DOWN: begin
-                if (up_down)
+                if (switch_rise)
                     next_state = UP;
             end
             default: next_state = UP;
@@ -39,11 +45,11 @@ module counter_3stage (
 
     reg [3:0] count_up ,count_down;
     always @(*) begin
-        count_up = count +'b1;
-        count_down = count -'b1;
+        count_up = count + 4'd1;
+        count_down = count - 4'd1;
     end
 
-    // 第三段：状态控制
+    // 第三段：沿前 state 控制本拍增减，方向切换在下一拍影响计数。
     always @(posedge clk) begin
         if (!rst_n)
             count <= 4'd0;
@@ -55,7 +61,4 @@ module counter_3stage (
             endcase
         end
     end
-
-
-
 endmodule

@@ -1,50 +1,46 @@
 `timescale 1ns/1ps
 
-// 一段式状态机：方向状态转移和计数器更新放在同一个时序块。
-// rst_n 为低有效同步复位；up_down 请求方向，由当前 state 控制本拍增减。
+// 一段式状态机：switch 上升沿切换 UP/DOWN，当前 state 控制计数方向。
+// rst_n 为低有效同步复位，回到 UP 并清零；en=0 时只暂停计数。
 module counter (
     input  wire       clk,
     input  wire       rst_n,
+    input  wire       switch,
     input  wire       en,
-    input  wire       up_down,
     output reg  [3:0] count
 );
     localparam UP   = 1'b1;
     localparam DOWN = 1'b0;
     reg state;
+    reg switch_d;
+    wire switch_rise = switch && !switch_d;
 
-always @(posedge clk) begin
-    if (!rst_n) begin
-        state <= UP;
-        count <= 4'd0;
-    end
-    else begin
-        case (state)
-            UP: begin
-                if (up_down) begin
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            state <= UP;
+            switch_d <= 1'b0;
+            count <= 4'd0;
+        end
+        else begin
+            switch_d <= switch;
+            case (state)
+                UP: begin
+                    if (switch_rise)
+                        state <= DOWN;
+                    if (en)
+                        count <= count + 4'd1;
+                end
+                DOWN: begin
+                    if (switch_rise)
+                        state <= UP;
+                    if (en)
+                        count <= count - 4'd1;
+                end
+                default: begin
                     state <= UP;
+                    count <= count;
                 end
-                else begin
-                    state <= DOWN;
-                end
-                if (en)
-                    count <= count + 4'd1;
-            end
-            DOWN: begin
-                if (up_down) begin
-                    state <= UP;
-                end
-                else begin
-                    state <= DOWN;
-                end
-                if (en)
-                    count <= count - 4'd1;
-            end
-            default: begin
-                state <= UP;
-                count <= count;
-            end
-        endcase
+            endcase
+        end
     end
-end
 endmodule

@@ -1,4 +1,4 @@
-# 比较两版当前方向状态和计数输出的时序行为。
+# 比较两版方向状态、switch 历史采样和计数输出的时序行为。
 read_verilog rtl/counter.v rtl/counter_3stage.v
 proc
 opt

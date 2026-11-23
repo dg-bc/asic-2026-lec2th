@@ -24,7 +24,7 @@ module counter_3stage (
         end
     end
 
-    // 第一段：状态寄存器与 switch 的上一拍采样。
+    // 第一段：状态寄存器
     always @(posedge clk) begin
         if (!rst_n) begin
             state <= UP;

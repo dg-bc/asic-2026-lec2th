@@ -14,16 +14,23 @@ module counter_3stage (
     reg next_state;
     reg switch_d;
     wire switch_rise = switch && !switch_d;
+    //上升沿采样
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            switch_d <= 1'b0;
+        end
+        else begin
+            switch_d <= switch;
+        end
+    end
 
     // 第一段：状态寄存器与 switch 的上一拍采样。
     always @(posedge clk) begin
         if (!rst_n) begin
             state <= UP;
-            switch_d <= 1'b0;
         end
         else begin
             state <= next_state;
-            switch_d <= switch;
         end
     end
 
